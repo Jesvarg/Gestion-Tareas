@@ -1,0 +1,91 @@
+@tailwind components;
+
+@layer components {
+  .card {
+    @apply bg-white p-4 rounded-lg shadow-md transition-all duration-300 hover:shadow-lg;
+  }
+
+  .input-base {
+    @apply w-full p-2 border border-gray-200 rounded transition-colors duration-200;
+  }
+
+  .input-base:focus {
+    @apply outline-none border-blue-500 ring-2 ring-blue-200;
+  }
+
+  .button-base {
+    @apply px-3 py-1 rounded font-medium transition-colors duration-200;
+  }
+
+  .button-base:hover {
+    @apply transform -translate-y-0.5;
+  }
+
+  .button-base:active {
+    @apply transform translate-y-0;
+  }
+
+  .button-primary {
+    @apply px-3 py-1 rounded font-medium transition-colors duration-200 bg-blue-500 text-white hover:bg-blue-600 hover:transform -translate-y-0.5 active:transform translate-y-0;
+  }
+
+  .button-success {
+    @apply px-3 py-1 rounded font-medium transition-colors duration-200 bg-green-500 text-white hover:bg-green-600 hover:transform -translate-y-0.5 active:transform translate-y-0;
+  }
+
+  .button-danger {
+    @apply px-3 py-1 rounded font-medium transition-colors duration-200 bg-red-500 text-white hover:bg-red-600 hover:transform -translate-y-0.5 active:transform translate-y-0;
+  }
+
+  .button-gray {
+    @apply px-3 py-1 rounded font-medium transition-colors duration-200 bg-gray-500 text-white hover:bg-gray-600 hover:transform -translate-y-0.5 active:transform translate-y-0;
+  }
+
+  .message {
+    @apply p-4 rounded-lg shadow-sm flex items-center gap-2;
+  }
+
+  .message-success {
+    @apply p-4 rounded-lg shadow-sm flex items-center gap-2 bg-green-100 text-green-700;
+  }
+
+  .message-error {
+    @apply p-4 rounded-lg shadow-sm flex items-center gap-2 bg-red-100 text-red-700;
+  }
+
+  .disabled {
+    @apply opacity-50 cursor-not-allowed;
+  }
+
+  .completed {
+    @apply opacity-75 line-through text-gray-500;
+  }
+
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50;
+  }
+
+  .transition-base {
+    @apply transition-all duration-200 ease-in-out;
+  }
+
+  .transition-smooth {
+    @apply transition-all duration-300 ease-in-out;
+  }
+
+  .hover-lift {
+    @apply transform transition-transform duration-200 hover:-translate-y-1;
+  }
+
+  .scale-on-hover {
+    @apply transform transition-transform duration-200 hover:scale-105;
+  }
+
+  .fade-in {
+    @apply opacity-0 transition-opacity duration-300;
+  }
+
+  .fade-in.show {
+    @apply opacity-100;
+  }
+} 

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
-import './index.css'
 import FormularioTareas from './components/FormularioTareas/FormularioTareas'
 import ListaTareas from './components/ListaTareas/ListaTareas'
+import './index.css'
 
 function App() {
   const [tareas, setTareas] = useState(() => {
@@ -35,8 +35,8 @@ function App() {
 
   const eliminarTarea = (id) => {
     setTareas(tareas.filter(tarea => tarea.id !== id))
-    setMensaje('✅ Tarea eliminada correctamente')
-    setTimeout(() => setMensaje(''), 3000)
+    setMensaje('❌ Tarea eliminada correctamente')
+    setTimeout(() => setMensaje(''), 4000)
   }
 
   const actualizarTarea = (id, datosActualizados) => {
@@ -45,11 +45,15 @@ function App() {
     ))
   }
 
-  const completarTarea = (id) => {
+  const completarTarea = (id, nuevoEstado) => {
     setTareas(tareas.map(tarea => 
-      tarea.id === id ? { ...tarea, completada: !tarea.completada } : tarea
+      tarea.id === id ? { ...tarea, completada: nuevoEstado } : tarea
     ))
-    setMensaje('✅ Tarea completada')
+    if (nuevoEstado) {
+      setMensaje('✅ Tarea completada')
+    } else {
+      setMensaje('🕓Tarea pendiente')
+    }
     setTimeout(() => setMensaje(''), 3000)
   }
 
@@ -61,7 +65,7 @@ function App() {
     setTareaEditando(null)
   }
 
-  // Filtrar tareas basado en la búsqueda y el filtro seleccionado
+  // Filtrar tareas
   const tareasFiltradas = tareas.filter(tarea => {
     const coincideConBusqueda = 
       tarea.titulo.toLowerCase().includes(busqueda.toLowerCase()) ||
@@ -73,6 +77,11 @@ function App() {
       return coincideConBusqueda && tarea.completada
     }
     return coincideConBusqueda
+  }).sort((a, b) => {
+    // Ordenar tareas completadas al final
+    if (a.completada && !b.completada) return 1
+    if (!a.completada && b.completada) return -1
+    return 0
   })
 
   // Calcular paginación
@@ -123,37 +132,24 @@ function App() {
                 />
               </div>
               <div className="flex gap-2">
-              <button
+                <button
                   onClick={() => setFiltro('todas')}
-                  className={`button-base ${
-                    filtro === 'todas' 
-                      ? 'bg-blue-500 text-white' 
-                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                  }`}
+                  className={`button-filter ${filtro === 'todas' ? 'active' : ''}`}
                 >
                   Todas
                 </button>
                 <button
                   onClick={() => setFiltro('pendientes')}
-                  className={`button-base ${
-                    filtro === 'pendientes' 
-                      ? 'bg-red-500 text-white' 
-                      : 'bg-red-200 text-red-700 hover:bg-red-300'
-                  }`}
+                  className={`button-filter ${filtro === 'pendientes' ? 'active' : ''}`}
                 >
                   Pendientes
                 </button>
                 <button
                   onClick={() => setFiltro('completadas')}
-                  className={`button-base ${
-                    filtro === 'completadas' 
-                      ? 'bg-green-500 text-white' 
-                      : 'bg-green-200 text-green-700 hover:bg-green-300'
-                  }`}
+                  className={`button-filter ${filtro === 'completadas' ? 'active' : ''}`}
                 >
                   Completadas
                 </button>
-                
               </div>
             </div>
 
