@@ -7,6 +7,10 @@ const FormularioTarea = ({ onAgregarTarea, tareaEditando, onCancelarEdicion }) =
     titulo: '',
     descripcion: ''
   })
+  const [touched, setTouched] = useState({
+    titulo: false,
+    descripcion: false
+  })
 
   useEffect(() => {
     if (tareaEditando) {
@@ -49,6 +53,13 @@ const FormularioTarea = ({ onAgregarTarea, tareaEditando, onCancelarEdicion }) =
     }
   }
 
+  const handleBlur = (campo) => {
+    setTouched(prev => ({ ...prev, [campo]: true }))
+    const valor = campo === 'titulo' ? titulo : descripcion
+    const error = validarCampo(campo, valor)
+    setErrores(prev => ({ ...prev, [campo]: error }))
+  }
+
   const validarFormulario = () => {
     const tituloError = validarCampo('titulo', titulo)
     const descripcionError = validarCampo('descripcion', descripcion)
@@ -72,6 +83,7 @@ const FormularioTarea = ({ onAgregarTarea, tareaEditando, onCancelarEdicion }) =
       })
       setTitulo('')
       setDescripcion('')
+      setTouched({ titulo: false, descripcion: false })
     }
   }
 
@@ -82,10 +94,12 @@ const FormularioTarea = ({ onAgregarTarea, tareaEditando, onCancelarEdicion }) =
     }
   }
 
+  const hayErrores = !!errores.titulo || !!errores.descripcion
+
   return (
-    <form onSubmit={handleSubmit} className="w-full">
-      <div className="mb-4">
-        <label htmlFor="titulo" className="block text-gray-700 text-sm font-bold mb-2">
+    <form onSubmit={handleSubmit} className="form-container">
+      <div className="form-group">
+        <label htmlFor="titulo" className="form-label">
           Título * <span></span>
         </label>
         <input
@@ -93,55 +107,57 @@ const FormularioTarea = ({ onAgregarTarea, tareaEditando, onCancelarEdicion }) =
           id="titulo"
           value={titulo}
           onChange={(e) => handleChange('titulo', e.target.value)}
+          onBlur={() => handleBlur('titulo')}
           onKeyDown={handleKeyDown}
           maxLength={15}
-          className={`input-base focus-ring ${
-            errores.titulo ? 'border-red-500' : ''
+          className={`input-base ${
+            touched.titulo && errores.titulo ? 'border-red-500' : ''
           }`}
           placeholder="Ingrese el nombre de la tarea"
-          aria-invalid={!!errores.titulo}
+          aria-invalid={touched.titulo && !!errores.titulo}
           aria-describedby="titulo-error"
         />
         <div className="flex justify-between text-xs mt-1">
-          <span id="titulo-error" className="text-red-500">
-            {errores.titulo}
+          <span id="titulo-error" className="error-message">
+            {touched.titulo && errores.titulo}
           </span>
           <span className="text-gray-500">{titulo.length}/15</span>
         </div>
       </div>
 
-      <div className="mb-6">
-        <label htmlFor="descripcion" className="block text-gray-700 text-sm font-bold mb-2">
+      <div className="form-group">
+        <label htmlFor="descripcion" className="form-label">
           Descripción <span></span>
         </label>
         <textarea
           id="descripcion"
           value={descripcion}
           onChange={(e) => handleChange('descripcion', e.target.value)}
+          onBlur={() => handleBlur('descripcion')}
           onKeyDown={handleKeyDown}
           maxLength={50}
-          className={`input-base focus-ring ${
-            errores.descripcion ? 'border-red-500' : ''
+          className={`input-base ${
+            touched.descripcion && errores.descripcion ? 'border-red-500' : ''
           }`}
           placeholder="Ingrese la descripción de la tarea"
-          rows="4"
-          aria-invalid={!!errores.descripcion}
+          rows="3"
+          aria-invalid={touched.descripcion && !!errores.descripcion}
           aria-describedby="descripcion-error"
         />
         <div className="flex justify-between text-xs mt-1">
-          <span id="descripcion-error" className="text-red-500">
-            {errores.descripcion}
+          <span id="descripcion-error" className="error-message">
+            {touched.descripcion && errores.descripcion}
           </span>
           <span className="text-gray-500">{descripcion.length}/50</span>
         </div>
       </div>
 
-      <div className="flex items-center justify-center gap-2">
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
         <button
           type="submit"
-          disabled={!!errores.titulo || !titulo.trim()}
-          className={`button-primary ${
-            !!errores.titulo || !titulo.trim() ? 'disabled' : ''
+          disabled={hayErrores || !titulo.trim()}
+          className={`button-primary w-full sm:w-auto ${
+            hayErrores || !titulo.trim() ? 'opacity-50 cursor-not-allowed' : ''
           }`}
         >
           {tareaEditando ? 'Guardar Cambios' : 'Agregar Tarea'}
@@ -150,7 +166,7 @@ const FormularioTarea = ({ onAgregarTarea, tareaEditando, onCancelarEdicion }) =
           <button
             type="button"
             onClick={onCancelarEdicion}
-            className="button-gray"
+            className="button-gray w-full sm:w-auto"
           >
             Cancelar
           </button>

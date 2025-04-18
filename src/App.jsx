@@ -24,10 +24,10 @@ function App() {
       setTareas(tareas.map(tarea => 
         tarea.id === tareaEditando.id ? nuevaTarea : tarea
       ))
-      setMensaje('✅ Tarea actualizada correctamente')
+      setMensaje('✅ Tarea actualizada')
     } else {
       setTareas([...tareas, nuevaTarea])
-      setMensaje('✅ Tarea agregada correctamente')
+      setMensaje('✅ Tarea agregada')
     }
     setTareaEditando(null)
     setTimeout(() => setMensaje(''), 3000)
@@ -35,7 +35,7 @@ function App() {
 
   const eliminarTarea = (id) => {
     setTareas(tareas.filter(tarea => tarea.id !== id))
-    setMensaje('❌ Tarea eliminada correctamente')
+    setMensaje('❌ Tarea eliminada')
     setTimeout(() => setMensaje(''), 4000)
   }
 
@@ -97,7 +97,7 @@ function App() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-4">
       <div className="container mx-auto px-4">
         <h1 className="text-3xl font-bold text-center mb-4 text-gray-800">
-          Gestión de Tareas
+          Gestor de Tareas
         </h1>
         
         {mensaje && (
